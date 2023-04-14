@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<title>슬롯머신(탈중앙화)</title>
+		<link rel="shortcut icon" href="slot.ico">
+		<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=2.0">
+
+		<link rel="stylesheet" href="css/bootstrap.min.css" />
+		<link rel="stylesheet" href="css/style.css" type="text/css" media="screen" />
+		<link rel="stylesheet" href="css/jquery.slotmachine.css" type="text/css" media="screen" />
+		<link rel="stylesheet" href="css/toastr.min.css" type="text/css" />
+
+		<script type="text/javascript" src="js/jquery.min.js"></script>
+		<script src="js/bootstrap.min.js"></script>
+		<script text="text/javascript" src="js/toastr.min.js"></script>
+		<script type="text/javascript" src="js/jquery.slotmachine.js"></script>
+         <script type="text/javascript" src="js/web3.min.js"></script>
+        <script type="text/javascript" src="js/truffle-contract.js"></script>
+        <script type="text/javascript" src="main.js"></script>
+	</head>
+	<audio src="sound/wheel_sound.wav" id="audio"></audio>
+	<script>
+		const audio = document.getElementById("audio")
+	</script>
+	<body>
+        <div>
+		<div class="header-line"></div>
+        <div id="money">상금(ETH): <b><span id="balance">0</span></b></div>
+        <button id="withdraw">출금</button>
+
+        <div class="instructions">
+            <h4><b>보상 체계</b></h4>
+            <h4 id="roll-cost">- 라운드당 베팅: 0.01 ether</h4>
+
+			<div class="instruction-table">
+				<div class="instruction-row">
+					<img src="img/slot5.png" width="30" height="30"/>
+					<img src="img/slot5.png" width="30" height="30"/>
+					<img src="img/slot5.png" width="30" height="30"/>
+					<span class="eth-win"> = 1  ether </span>
+				</div>
+
+				<div class="instruction-row">
+					<img src="img/slot6.png" width="30" height="30"/>
+					<img src="img/slot6.png" width="30" height="30"/>
+					<img src="img/slot6.png" width="30" height="30"/>
+					<span class="eth-win"> = 0.1  ether </span>
+				</div>
+
+				<div class="instruction-row">
+					<img src="img/slot4.png" width="30" height="30"/>
+					<img src="img/slot4.png" width="30" height="30"/>
+					<img src="img/slot4.png" width="30" height="30"/>
+					<span class="eth-win"> = 0.05 ether </span>
+				</div>
+
+				<div class="instruction-row">
+					<img src="img/slot3.png" width="30" height="30"/>
+					<img src="img/slot3.png" width="30" height="30"/>
+					<img src="img/slot3.png" width="30" height="30"/>
+					<span class="eth-win"> = 0.04 ether </span>
+				</div>
+
+				<div class="instruction-row">
+					<img src="img/slot2.png" width="30" height="30"/>
+					<img src="img/slot2.png" width="30" height="30"/>
+					<img src="img/slot2.png" width="30" height="30"/>
+					<span class="eth-win"> = 0.03  ether </span>
+				</div>
+
+				<div class="instruction-row">
+					<img src="img/slot1.png" width="30" height="30"/>
+					<img src="img/slot1.png" width="30" height="30"/>
+					<img src="img/slot1.png" width="30" height="30"/>
+					<span class="eth-win"> = 0.02 ether </span>
+				</div>
+
+				<div class="instruction-row">
+					<span class="eth-win">2개 같은 심볼 = 0.01 ether </span>
+				</div>
+			</div>
+     
+        </div>
+		<div id="warning" style="color: red;">
+			(경고) 모든 베팅에 대한 책임은 플레이어 본인에게 있습니다.
+		</div>
+		<div id="return" style="color: white;">
+			환수율: 99%. 스마트 컨트랙트의 소스코드는 <a target="_blank" href="https://sepolia.etherscan.io/address/0x099bF3018B960B95DaBD8F33054dE4de6a23bDFF#code">EtherScan</a>을 통해 검증되어 투명하게 운영되고 있습니다.
+		</div>
+		<div id="desc">트랜잭션 확인: </div>
+		<a id="etherscan" target="_blank" style="color: white;"></a>
+		<div id="casino" style="padding-top:0px; padding-bottom: -1px; padding-right: -100px;">
+			<div class="content">
+				<h1 id="header-msg">슬롯머신(탈중앙화)</h1>
+
+				<div>
+					<div id="casino1" class="slotMachine" style="margin-left: -65px;">
+						<div class="slot slot1"></div>
+						<div class="slot slot2"></div>
+						<div class="slot slot3"></div>
+						<div class="slot slot4"></div>
+						<div class="slot slot5"></div>
+						<div class="slot slot6"></div>
+					</div>
+
+					<div id="casino2" class="slotMachine">
+						<div class="slot slot1"></div>
+						<div class="slot slot2"></div>
+						<div class="slot slot3"></div>
+						<div class="slot slot4"></div>
+						<div class="slot slot5"></div>
+						<div class="slot slot6"></div>
+					</div>
+
+					<div id="casino3" class="slotMachine">
+						<div class="slot slot1"></div>
+						<div class="slot slot2"></div>
+						<div class="slot slot3"></div>
+						<div class="slot slot4"></div>
+						<div class="slot slot5"></div>
+						<div class="slot slot6"></div>
+					</div>
+
+					<div class="btn-group btn-group-justified btn-group-casino" role="group">
+						<div id="slotMachineButtonShuffle" type="button" class="btn btn-primary btn-lg">스핀</div>
+						<div id="slotMachineButtonStop" type="button" class="btn btn-primary btn-lg" data-toggle="tooltip" title="">정지</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="bottom-line"></div>
+        </div>
+
+	</body>
+</html>
