@@ -36,6 +36,7 @@ App = {
   },
 
   initContract: function() {
+    $.ajaxSetup({async: false});
     $.getJSON('SlotMachine.json', function(data) {
       // Get the necessary contract artifact file and instantiate it with truffle-contract.
       var SlotMachineArtifact = data;
