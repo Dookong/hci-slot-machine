@@ -14,25 +14,36 @@ App = {
   rolled: false,
   audio: null,
 
-  init: function() {
+
+  init: async function() {
     App.audio = document.getElementById("audio");
     $("#desc").hide();
-    return App.initWeb3();
+    await App.initWeb3();
+    return App.initContract();
   },
 
-  initWeb3: function() {
-    // Initialize web3 and set the provider to the testRPC.
-    if (typeof web3 !== 'undefined') {
-      App.web3Provider = web3.currentProvider;
-      web3 = new Web3(web3.currentProvider);
-    } else {
-      // set the provider you want from Web3.providers
+  initWeb3: async function() {
+    // Modern dapp browsers...
+    if (window.ethereum) {
+      App.web3Provider = window.ethereum;
+      try {
+        // Request account access
+        await window.ethereum.enable();
+      } catch (error) {
+        // User denied account access...
+        console.error("User denied account access");
+      }
+    }
+    // Legacy dapp browsers...
+    else if (window.web3) {
+      App.web3Provider = window.web3.currentProvider;
+    }
+    // If no injected web3 instance is detected, fall back to the Alchemy provider.
+    else {
       App.web3Provider = new Web3.providers.HttpProvider('https://eth-sepolia.g.alchemy.com/');
-      web3 = new Web3(App.web3Provider);
       toastr.warning('메타마스크 확장 프로그램이 필요합니다!');
     }
-
-    return App.initContract();
+    web3 = new Web3(App.web3Provider);
   },
 
   initContract: function() {
@@ -42,7 +53,7 @@ App = {
       var SlotMachineArtifact = data;
 
       try {
-         App.contracts.SlotMachine = TruffleContract(SlotMachineArtifact);
+        App.contracts.SlotMachine = TruffleContract(SlotMachineArtifact);
 
         // Set the provider for our contract.
         App.contracts.SlotMachine.setProvider(App.web3Provider);
@@ -50,7 +61,7 @@ App = {
         App.checkAccount();
         App.slotMachine();
       } catch(err) {
-          console.log(err);
+        console.log(err);
       }
 
     });
@@ -87,7 +98,7 @@ App = {
         if (error) {
             console.log(error);
         }
-        
+
         App.account = accounts[0];
 
         App.contracts.SlotMachine.deployed().then(function(_instance) {
