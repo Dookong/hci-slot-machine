@@ -1,5 +1,4 @@
 node_modules
 artifacts
-build
 .env
 build.js
