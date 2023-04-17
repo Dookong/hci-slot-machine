@@ -84,6 +84,10 @@ App = {
 
   checkAccount: function() {
     web3.eth.getAccounts(function(error, accounts) {
+        if (error) {
+            console.log(error);
+        }
+        
         App.account = accounts[0];
 
         App.contracts.SlotMachine.deployed().then(function(_instance) {
@@ -119,6 +123,7 @@ App = {
             App.checkBalance();
         })
         .catch(function(err) {
+            console.log(err)
             toastr.warning('이더리움 지갑 연결을 확인하세요!');
         });
     });
