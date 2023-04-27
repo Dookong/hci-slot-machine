@@ -170,8 +170,6 @@ App = {
     .catch(function(err) {
         toastr.warning('이더리움 지갑 연결을 확인하세요!');
     });
-
-    App.clicked = false;
   },
 
   prizeWon: function() {
