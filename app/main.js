@@ -108,26 +108,28 @@ App = {
 
              event.watch(function(err, resp) {
                  if(resp.event === "Rolled") {
-                     $("#slotMachineButtonStop").attr("disabled", false);
-                     $("#slotMachineButtonStop").attr("title", "");
-                     $("#header-msg").text("슬롯머신(탈중앙화)");
-
-                     App.roll1 = resp.args.rand1.valueOf();
-                     App.roll2 = resp.args.rand2.valueOf();
-                     App.roll3 = resp.args.rand3.valueOf();
-
-                     App.rolled = true;
-
-                     console.log(App.roll1, App.roll2, App.roll3);
-
-                     toastr.success('처리 완료!', '정지 버튼을 눌러서 결과를 확인하세요');
-                     App.audio.play()
-
-                     setTimeout(App.checkBalance, 1000);
-                     url = `https://sepolia.etherscan.io/tx/${resp.transactionHash}`;
-                     $("#etherscan").text(url);
-                     $("#etherscan").attr("href", url);
-                     $("#desc").show();
+                    if (resp.args.sender.valueOf() == App.account){
+                      $("#slotMachineButtonStop").attr("disabled", false);
+                      $("#slotMachineButtonStop").attr("title", "");
+                      $("#header-msg").text("슬롯머신(탈중앙화)");
+ 
+                      App.roll1 = resp.args.rand1.valueOf();
+                      App.roll2 = resp.args.rand2.valueOf();
+                      App.roll3 = resp.args.rand3.valueOf();
+ 
+                      App.rolled = true;
+ 
+                      console.log(App.roll1, App.roll2, App.roll3);
+ 
+                      toastr.success('처리 완료!', '정지 버튼을 눌러서 결과를 확인하세요');
+                      App.audio.play()
+ 
+                      setTimeout(App.checkBalance, 1000);
+                      url = `https://sepolia.etherscan.io/tx/${resp.transactionHash}`;
+                      $("#etherscan").text(url);
+                      $("#etherscan").attr("href", url);
+                      $("#desc").show();
+                    }
                  }
              });
 
