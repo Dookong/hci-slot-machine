@@ -105,7 +105,7 @@ App = {
             instance = _instance;
 
              var event = instance.Rolled();
-
+            
              event.watch(function(err, resp) {
                  if(resp.event === "Rolled") {
                     if (resp.args.sender.valueOf() == App.account){
@@ -164,8 +164,9 @@ App = {
     }
 
     App.contracts.SlotMachine.deployed().then(function(instance) {
-
-        return instance.oneRoll.sendTransaction({from: App.account, value: web3.toWei('0.01', 'ether')});
+        if (instance.sender == App.account){
+          return instance.oneRoll.sendTransaction({from: App.account, value: web3.toWei('0.01', 'ether')});
+        }
 
     }).then(function() {
         App.startShuffle();
