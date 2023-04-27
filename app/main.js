@@ -14,7 +14,6 @@ App = {
   rolled: false,
   audio: null,
 
-
   init: async function() {
     App.audio = document.getElementById("audio");
     $("#desc").hide();
@@ -164,16 +163,15 @@ App = {
     }
 
     App.contracts.SlotMachine.deployed().then(function(instance) {
-        if (instance.sender == App.account){
-          return instance.oneRoll.sendTransaction({from: App.account, value: web3.toWei('0.01', 'ether')});
-        }
-
+        return instance.oneRoll.sendTransaction({from: App.account, value: web3.toWei('0.01', 'ether')});
     }).then(function() {
         App.startShuffle();
     })
     .catch(function(err) {
         toastr.warning('이더리움 지갑 연결을 확인하세요!');
     });
+
+    App.clicked = false;
   },
 
   prizeWon: function() {
